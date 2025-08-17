@@ -1,3 +1,4 @@
+# core/settings.py
 """
 Django settings for core project.
 
@@ -10,36 +11,48 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+from typing import Any, List, Dict, Tuple
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-j37=g=p4$zrs7_78lzf&kiuf=urxptbv$xsjk7l4^1jl6f9zb!'
+SECRET_KEY: str = os.environ.get('BACKEND_SECRET_KEY', 'django-insecure-j37=g=p4$zrs7_78lzf&kiuf=urxptbv$xsjk7l4^1jl6f9zb!')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG: bool = os.environ.get('BACKEND_DEBUG', 'True') == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS: List[str] = ['*']
 
+# 添加 CSRF 信任来源
+
+CSRF_TRUSTED_ORIGINS: List[str] = [f'{os.environ.get('FRONTEND_DOMAIN', 'http://localhost:30000')}']
+
+# 添加 X-Forwarded 代理支持
+
+SECURE_PROXY_SSL_HEADER: Tuple = ('HTTP_X_FORWARDED_PROTO', 'http')
+USE_X_FORWARDED_HOST: bool = True
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS: List[str] = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 插件
+    'ninja',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE: List[str] = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,9 +62,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'core.urls'
+ROOT_URLCONF: str = 'core.urls'
 
-TEMPLATES = [
+TEMPLATES: List[Dict[str, Any]] = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
@@ -66,24 +79,28 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.application'
+WSGI_APPLICATION: str = 'core.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
+DATABASES: Dict[str, Dict[str, str]] = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'abc',
+        'USER': 'admin',
+        'PASSWORD': 'passwd',
+        'HOST': 'postgres' if os.environ.get('BACKEND_IN_DOCKER', "False") == "True" else 'localhost',
+        'PORT': '5432' if os.environ.get('BACKEND_IN_DOCKER', "False") == "True" else '30002',
+    },
 }
 
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
+AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
@@ -102,21 +119,21 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE: str = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE: str = 'Asia/Shanghai'
 
-USE_I18N = True
+USE_I18N: bool = True
 
-USE_TZ = True
+USE_TZ: bool = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL: str = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD: str = 'django.db.models.BigAutoField'
