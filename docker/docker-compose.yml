@@ -31,7 +31,7 @@ services:
     command: uv run ./main.py
     restart: unless-stopped
   Database:
-    image: postgres:latest
+    image: postgres:17
     container_name: database
     ports:
       - "30002:5432"
