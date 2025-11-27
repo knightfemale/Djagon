@@ -30,6 +30,10 @@ services:
       DATABASE_NAME: "${DATABASE_NAME}"
       DATABASE_USER: "${DATABASE_USER}"
       DATABASE_PASSWORD: "${DATABASE_PASSWORD}"
+    volumes:
+      - type: bind
+        source: ./backend/logs
+        target: /workspace/logs
     command: uv run ./main.py
     restart: unless-stopped
     depends_on:
