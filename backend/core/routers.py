@@ -12,4 +12,4 @@ router: Router = Router(tags=["核心"])
 )
 def hello(request: HttpRequest) -> str:
     """用于连通测试, 返回一个字符串"""
-    return "Hello World!"
+    return "Hello Djagon!"
