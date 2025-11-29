@@ -39,7 +39,7 @@ services:
     depends_on:
       - Database
   Database:
-    image: postgres:17
+    image: postgres:latest
     container_name: "${COMPOSE_PROJECT_NAME}-database"
     ports:
       - "30002:5432"
