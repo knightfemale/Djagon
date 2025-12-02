@@ -21,7 +21,7 @@ def createdatabase() -> None:
         db_name: str = settings.DATABASES["default"]["NAME"]
         # 首先连接到 postgres 数据库来检查目标数据库是否存在
         conn_params: Dict[str, Any] = {
-            "dbname": db_name,
+            "dbname": "postgres",
             "user": settings.DATABASES["default"]["USER"],
             "password": settings.DATABASES["default"]["PASSWORD"],
             "host": settings.DATABASES["default"]["HOST"],
