@@ -7,6 +7,7 @@ dependencies = [
     "django-ninja",
     "python-dotenv",
     "django-simpleui",
+    "django-ninja-extra",
     "psycopg[binary,pool]",
 ]
 
