@@ -191,9 +191,27 @@ def collectstatic() -> None:
         sys.exit(1)
 
 
+def exportopenapi() -> None:
+    print("ℹ️ 开始导出 openapi 文件")
+    try:
+        execute_from_command_line(
+            [
+                "manage.py",
+                "export_openapi_schema",
+                "--indent",
+                "2",
+                "--sorted",
+                "--output",
+                "./../frontend/src/lib/api/backend-api.json",
+            ]
+        )
+        print("✅ 静态文件收集完成")
+    except Exception as e:
+        print(f"❌ 静态文件收集失败: {e}")
+        sys.exit(1)
+
+
 def main() -> None:
-    # 加载环境变量
-    load_dotenv()
     # 添加项目根目录到 Python 路径
     sys.path.insert(0, str(Path(__file__).parent.parent))
     # 设置 Django 环境变量
@@ -222,10 +240,13 @@ def main() -> None:
         test()
     elif function_name == "collectstatic":
         collectstatic()
+    elif function_name == "exportopenapi":
+        exportopenapi()
     else:
         print(f"未知函数: {function_name}")
         sys.exit(1)
 
 
 if __name__ == "__main__":
+    load_dotenv()
     main()
