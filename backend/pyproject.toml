@@ -4,7 +4,6 @@ version = "0.0.1"
 requires-python = ">=3.14,<3.15"
 dependencies = [
     "uvicorn",
-    "django-ninja",
     "python-dotenv",
     "django-simpleui",
     "django-ninja-extra",
